@@ -13,16 +13,14 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
-import { Link } from "react-router-dom";
-
-
+import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [isAuthenticated, setIsAuthenticated] = React.useState(true); //for checking login status
+    const [isAuthenticated, setIsAuthenticated] = React.useState(true); // for checking login status
 
-
+    const navigate = useNavigate(); // Using useNavigate for programmatic navigation
 
     const pages = [
         { name: "Home", path: "/" },
@@ -30,8 +28,8 @@ function Navbar() {
         { name: "Blogs", path: "/blog" },
         { name: "FAQs", path: "/faqs" },
         { name: "AutismCheck", path: "/autism-check" },
-       
     ];
+
     const settings = isAuthenticated ? ['Profile', 'Logout'] : ['Login', 'Register'];
 
     const handleOpenNavMenu = (event) => {
@@ -54,6 +52,12 @@ function Navbar() {
         localStorage.removeItem("token"); // Remove token
     };
 
+    // Function to handle AutismCheck click
+    const handleAutismCheckClick = () => {
+        window.open('http://localhost:8501/', '_blank'); // Open in a new tab
+    };
+    
+
     return (
         <AppBar position="fixed">
             <Container maxWidth="xl">
@@ -67,9 +71,7 @@ function Navbar() {
                         sx={{
                             mr: 2,
                             display: { xs: 'none', md: 'flex' },
-                            //   fontFamily: 'monospace',
                             fontWeight: 700,
-                            //   letterSpacing: '.3rem',
                             color: 'inherit',
                             textDecoration: 'none',
                         }}
@@ -105,11 +107,13 @@ function Navbar() {
                             sx={{ display: { xs: 'block', md: 'none' } }}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                                <MenuItem
+                                    key={page.name}
+                                    onClick={page.name === "AutismCheck" ? handleAutismCheckClick : handleCloseNavMenu}
+                                >
                                     <Typography sx={{ textAlign: 'center' }}>{page.name}</Typography>
                                 </MenuItem>
                             ))}
-
                         </Menu>
                     </Box>
                     <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -133,33 +137,22 @@ function Navbar() {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'flex-end' }}>
                         {pages.map((page) => (
-                            // console.log(page)
-                            // <Button
-                            //     key={page}
-                            //     onClick={handleCloseNavMenu}
-                            //     sx={{ my: 2, color: 'white', display: 'block' }}
-                            // >
-                            //     {page}
-                            // </Button>
                             <Button
                                 key={page.path}
                                 component={Link}
-                                to={page.path}
+                                to={page.path === "AutismCheck" ? "http://localhost:8501/" : page.path} // Prevent default Link behavior for AutismCheck
+                                onClick={page.name === "AutismCheck" ? handleAutismCheckClick : undefined} // Handle click for AutismCheck
                                 sx={{ my: 2, color: "white", display: "block" }}
                             >
                                 {page.name}
                             </Button>
-
                         ))}
                     </Box>
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
-                            {/* <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                            </IconButton> */}
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 {isAuthenticated ? (
-                                    <AccountCircleSharpIcon sx={{ fontSize: 40 }} /> //user profile shown here later
+                                    <AccountCircleSharpIcon sx={{ fontSize: 40 }} />
                                 ) : (
                                     <Typography variant="h6" sx={{ color: 'white' }}>
                                         Login
@@ -190,12 +183,10 @@ function Navbar() {
                             ))}
                         </Menu>
                     </Box>
-
-
-
                 </Toolbar>
             </Container>
         </AppBar>
     );
 }
+
 export default Navbar;
