@@ -26,12 +26,13 @@ function Navbar() {
 
     const pages = [
         { name: "Home", path: "/" },
-        { name: "AutismCheck", path: "/autism-check" },
-        { name: "Blog", path: "/blog" },
+        { name: "About", path: "/about" },
+        { name: "Blogs", path: "/blog" },
         { name: "FAQs", path: "/faqs" },
-        { name: "About", path: "/about" }
+        { name: "AutismCheck", path: "/autism-check" },
+       
     ];
-    const settings = isAuthenticated ? ['Profile', 'Account', 'Logout'] : ['Login', 'Register'];
+    const settings = isAuthenticated ? ['Profile', 'Logout'] : ['Login', 'Register'];
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
