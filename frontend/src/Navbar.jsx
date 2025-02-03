@@ -13,6 +13,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
+import { Link } from "react-router-dom";
+
 
 
 function Navbar() {
@@ -22,8 +24,13 @@ function Navbar() {
 
 
 
-    // const pages = isAuthenticated ? ['About', 'FAQs', 'Autism check'] : ['Home', 'About', 'Login'];
-    const pages = ['Autism check','Blog', 'FAQs', 'About'];
+    const pages = [
+        { name: "Home", path: "/" },
+        { name: "AutismCheck", path: "/autism-check" },
+        { name: "Blog", path: "/blog" },
+        { name: "FAQs", path: "/faqs" },
+        { name: "About", path: "/about" }
+    ];
     const settings = isAuthenticated ? ['Profile', 'Account', 'Logout'] : ['Login', 'Register'];
 
     const handleOpenNavMenu = (event) => {
@@ -54,8 +61,8 @@ function Navbar() {
                     <Typography
                         variant="h6"
                         noWrap
-                        component="a"
-                        href="#app-bar-with-responsive-menu"
+                        component={Link}
+                        to="/"
                         sx={{
                             mr: 2,
                             display: { xs: 'none', md: 'flex' },
@@ -97,8 +104,8 @@ function Navbar() {
                             sx={{ display: { xs: 'block', md: 'none' } }}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                                    <Typography sx={{ textAlign: 'center' }}>{page.name}</Typography>
                                 </MenuItem>
                             ))}
 
@@ -108,8 +115,8 @@ function Navbar() {
                     <Typography
                         variant="h5"
                         noWrap
-                        component="a"
-                        href="#app-bar-with-responsive-menu"
+                        component={Link}
+                        to="/"
                         sx={{
                             mr: 2,
                             display: { xs: 'flex', md: 'none' },
@@ -125,13 +132,23 @@ function Navbar() {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'flex-end' }}>
                         {pages.map((page) => (
+                            // console.log(page)
+                            // <Button
+                            //     key={page}
+                            //     onClick={handleCloseNavMenu}
+                            //     sx={{ my: 2, color: 'white', display: 'block' }}
+                            // >
+                            //     {page}
+                            // </Button>
                             <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
+                                key={page.path}
+                                component={Link}
+                                to={page.path}
+                                sx={{ my: 2, color: "white", display: "block" }}
                             >
-                                {page}
+                                {page.name}
                             </Button>
+
                         ))}
                     </Box>
                     <Box sx={{ flexGrow: 0 }}>
@@ -141,7 +158,7 @@ function Navbar() {
                             </IconButton> */}
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 {isAuthenticated ? (
-                                    <AccountCircleSharpIcon sx={{ fontSize: 40 }}/> //user profile shown here later
+                                    <AccountCircleSharpIcon sx={{ fontSize: 40 }} /> //user profile shown here later
                                 ) : (
                                     <Typography variant="h6" sx={{ color: 'white' }}>
                                         Login
