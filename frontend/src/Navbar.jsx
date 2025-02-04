@@ -13,24 +13,34 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
+
 
 function Navbar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [isAuthenticated, setIsAuthenticated] = React.useState(true); // for checking login status
+    const [isAuthenticated, setIsAuthenticated] = React.useState(false); //for checking login status
 
-    const navigate = useNavigate(); // Using useNavigate for programmatic navigation
+
 
     const pages = [
         { name: "Home", path: "/" },
         { name: "About", path: "/about" },
         { name: "Blogs", path: "/blog" },
         { name: "FAQs", path: "/faqs" },
-        { name: "AutismCheck", path: "/autism-check" },
-    ];
+        { name: "AutismCheck", path: "http://localhost:8501/" },
 
-    const settings = isAuthenticated ? ['Profile', 'Logout'] : ['Login', 'Register'];
+    ];
+    const settings = isAuthenticated ?
+        [
+            { name: 'Profile', path: '/profile' },
+            { name: 'Logout', path: '/logout' }
+        ] :
+        [
+            { name: 'Register', path: '/register' },
+            { name: 'Login', path: '/login' }
+        ];
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -52,12 +62,6 @@ function Navbar() {
         localStorage.removeItem("token"); // Remove token
     };
 
-    // Function to handle AutismCheck click
-    const handleAutismCheckClick = () => {
-        window.open('http://localhost:8501/', '_blank'); // Open in a new tab
-    };
-    
-
     return (
         <AppBar position="fixed">
             <Container maxWidth="xl">
@@ -71,7 +75,9 @@ function Navbar() {
                         sx={{
                             mr: 2,
                             display: { xs: 'none', md: 'flex' },
+                            //   fontFamily: 'monospace',
                             fontWeight: 700,
+                            //   letterSpacing: '.3rem',
                             color: 'inherit',
                             textDecoration: 'none',
                         }}
@@ -107,13 +113,11 @@ function Navbar() {
                             sx={{ display: { xs: 'block', md: 'none' } }}
                         >
                             {pages.map((page) => (
-                                <MenuItem
-                                    key={page.name}
-                                    onClick={page.name === "AutismCheck" ? handleAutismCheckClick : handleCloseNavMenu}
-                                >
+                                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
                                     <Typography sx={{ textAlign: 'center' }}>{page.name}</Typography>
                                 </MenuItem>
                             ))}
+
                         </Menu>
                     </Box>
                     <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -140,8 +144,7 @@ function Navbar() {
                             <Button
                                 key={page.path}
                                 component={Link}
-                                to={page.path === "AutismCheck" ? "http://localhost:8501/" : page.path} // Prevent default Link behavior for AutismCheck
-                                onClick={page.name === "AutismCheck" ? handleAutismCheckClick : undefined} // Handle click for AutismCheck
+                                to={page.path}
                                 sx={{ my: 2, color: "white", display: "block" }}
                             >
                                 {page.name}
@@ -150,12 +153,15 @@ function Navbar() {
                     </Box>
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
+                            {/* <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                            </IconButton> */}
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 {isAuthenticated ? (
-                                    <AccountCircleSharpIcon sx={{ fontSize: 40 }} />
+                                    <AccountCircleSharpIcon sx={{ fontSize: 40 }} /> //user profile shown here later
                                 ) : (
                                     <Typography variant="h6" sx={{ color: 'white' }}>
-                                        Login
+                                        <AccountCircleSharpIcon sx={{ fontSize: 40 }} />
                                     </Typography>
                                 )}
                             </IconButton>
@@ -177,16 +183,29 @@ function Navbar() {
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                                <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
+                                    <Typography
+                                        sx={{
+                                            textDecoration: 'none',  // Remove underline
+                                            color: 'black'  // Set text color to black
+                                        }}
+                                        component={Link}
+                                        to={setting.path}
+                                    >
+                                        {setting.name}
+                                    </Typography>
                                 </MenuItem>
                             ))}
+
                         </Menu>
                     </Box>
+
+
+
                 </Toolbar>
             </Container>
         </AppBar>
     );
 }
-
 export default Navbar;
+

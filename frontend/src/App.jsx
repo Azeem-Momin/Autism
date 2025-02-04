@@ -8,18 +8,22 @@ import Blog from './landing_page/Blog';
 import Home from './landing_page/Home';
 import Footer from './Footer';
 import NotFound from './NotFound';
+import Register from './user_page/Register';
+import Login from './user_page/Login';
 
 function App() {
   return (
     <Router>
       <Navbar />
       <Routes>
-      <Route path="/" element={<Home/>} />
+        <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/faqs" element={<FAQs />} />
         <Route path="/autism-check" element={<AutismCheck />} />
         <Route path="/blog" element={<Blog />} />
-        <Route path='*' element={<NotFound/>} />
+        <Route path="/register" element={<Register />} />   
+        <Route path="/login" element={<Login />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
       <Footer />
     </Router>
