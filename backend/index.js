@@ -12,10 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 // Connect to MongoDB
 async function connectDb() {
   try {
-    await mongoose.connect("mongodb://localhost:27017/autism", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    await mongoose.connect("mongodb://localhost:27017/autism");
     console.log("MongoDB Connected");
   } catch (error) {
     console.error("MongoDB Connection Error:", error);
