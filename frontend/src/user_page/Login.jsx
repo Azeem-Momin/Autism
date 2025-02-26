@@ -1,35 +1,40 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { SignInPage } from '@toolpad/core/SignInPage';
 import { useTheme } from '@mui/material/styles';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-// preview-start
 const providers = [{ id: 'credentials', name: 'Email and Password' }];
-// preview-end
-
-const signIn = async (provider, formData) => {
-  const promise = new Promise((resolve) => {
-    setTimeout(() => {
-      alert(
-        `Signing in with "${provider.name}" and credentials: ${formData.get('email')}, ${formData.get('password')}`,
-      );
-      resolve();
-    }, 300);
-  });
-  return promise;
-};
 
 export default function CredentialsSignInPage() {
   const theme = useTheme();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/login', { email, password });
+
+      if (response.data.message === 'Login successful') {
+        navigate('/'); // Redirect to home page
+      }
+    } catch (error) {
+      setError('Invalid email or password');
+    }
+  };
+
   return (
-    // preview-start
     <AppProvider theme={theme}>
-      <SignInPage
-        signIn={signIn}
-        providers={providers}
-        slotProps={{ emailField: { autoFocus: false } }}
-      />
+      <SignInPage signIn={() => {}} providers={providers} slotProps={{ emailField: { autoFocus: false } }} />
+      <div>
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <button onClick={handleLogin}>Login</button>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+      </div>
     </AppProvider>
-    // preview-end
   );
 }

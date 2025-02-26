@@ -28,6 +28,7 @@ export default function CredentialsSignInPage() {
         signIn={signIn}
         providers={providers}
         slotProps={{ emailField: { autoFocus: false } }}
+       
       />
     </AppProvider>
     // preview-end
